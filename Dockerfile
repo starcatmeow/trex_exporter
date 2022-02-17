@@ -16,26 +16,27 @@ ARG CGO_ENABLED=0
 RUN go build -a -installsuffix cgo -o bin/trex
 RUN chmod +x bin/trex
 
-#########
-# FINAL #
-#########
-
-FROM alpine:3.15
-
-# set label for Docker image repo
-LABEL org.opencontainers.image.source="https://github.com/warren-ru/trex_exporter"
-
-# create directory for the app and set it as a work dircetory
-RUN mkdir -p /trex_exporter
-WORKDIR /trex_exporter
-
-# copy built files
-COPY --from=builder /usr/src/app/bin .
-
 # create non-privelleged user for running the app
 RUN addgroup -S app && adduser -S app -G app
 RUN chown -R app:app /trex_exporter
 USER app
+
+#########
+# FINAL #
+#########
+
+FROM scratch
+
+# set label for Docker image repo
+LABEL org.opencontainers.image.source="https://github.com/starcatmeow/trex_exporter"
+
+# create directory for the app and set work dircetory
+WORKDIR /trex_exporter
+
+# copy built files
+COPY --from=builder /usr/src/app/bin .
+COPY --from=builder /etc/passwd /etc/
+
 
 # define environments
 ENV TREX_EXPORTER_PORT=9788
