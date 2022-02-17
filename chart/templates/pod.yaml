@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ include "trex-exporter.fullname" . }}
+  labels:
+      {{- include "trex-exporter.labels" . | nindent 4 }}
+spec:
+  containers:
+    - name: exporter
+      image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 9102
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 9102
+      readinessProbe:
+        httpGet:
+          path: /
+          port: 9102
+      env:
+        - name: TREX_EXPORTER_PORT
+          value: '9102'
+        - name: TREX_MINER_URL
+          value: {{ .Values.settings.apiAddress }}
+        - name: TREX_WORKER_NAME
+          value: {{ .Values.settings.workerName }}
