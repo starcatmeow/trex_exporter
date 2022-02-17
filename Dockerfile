@@ -34,14 +34,12 @@ USER nobody
 # copy built files
 COPY --from=builder /usr/src/app/bin .
 COPY --from=builder /etc/passwd /etc/
-COPY --from=builder /bin/sh /bin/
 
 
 # define environments
 ENV TREX_EXPORTER_PORT=9788
-ENV TREX_EXPORTER_BIND_ADDRESS=0.0.0.0
 ENV TREX_MINER_URL=http://localhost:4057
 ENV TREX_WORKER_NAME=trex
 
 # run the app
-CMD ./trex --api-address=$TREX_MINER_URL --web.listen-address=$TREX_EXPORTER_BIND_ADDRESS:$TREX_EXPORTER_PORT --worker=$TREX_WORKER_NAME
+CMD ["/trex_exporter/trex"]

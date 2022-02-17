@@ -23,13 +23,26 @@ var RootCmd = &cobra.Command{
 }
 
 func init() {
-	RootCmd.PersistentFlags().StringVar(&exporter.TrexApiAddress, flagTrexApiAddress, "http://localhost:4067",
+	envAddr := os.Getenv("TREX_EXPORTER_PORT")
+	if envAddr == "" {
+		envAddr = "9788"
+	}
+	envAddr = "0.0.0.0:" + envAddr
+	envMinerurl := os.Getenv("TREX_MINER_URL")
+	if envMinerurl == "" {
+		envMinerurl = "http://localhost:4067"
+	}
+	envWorkername := os.Getenv("TREX_WORKER_NAME")
+	if envWorkername == "" {
+		envWorkername = "trex"
+	}
+	RootCmd.PersistentFlags().StringVar(&exporter.TrexApiAddress, flagTrexApiAddress, envMinerurl,
 		"Address of the t-rex API.")
 
-	RootCmd.PersistentFlags().StringVar(&exporter.Worker, flagWorker, "trex",
+	RootCmd.PersistentFlags().StringVar(&exporter.Worker, flagWorker, envWorkername,
 		"Name to identify the T-Rex Miner. The name will be included in every metric as the label 'worker'.")
 
-	RootCmd.PersistentFlags().StringVar(&exporter.WebListenAddress, flagWebListenAddress, "0.0.0.0:9788",
+	RootCmd.PersistentFlags().StringVar(&exporter.WebListenAddress, flagWebListenAddress, envAddr,
 		"Address on which to expose metrics.")
 }
 
