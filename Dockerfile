@@ -15,10 +15,7 @@ ARG GOARCH=$TARGETARCH
 ARG CGO_ENABLED=0
 RUN go build -a -installsuffix cgo -o bin/trex
 RUN chmod +x bin/trex
-
-# create non-privelleged user for running the app
-RUN adduser --group --no-create-home --disabled-login --disabled-password app
-RUN chown -R app:app /trex_exporter
+RUN chown -R nobody:nobody /trex_exporter
 
 
 #########
@@ -32,7 +29,7 @@ LABEL org.opencontainers.image.source="https://github.com/starcatmeow/trex_expor
 
 # create directory for the app and set work dircetory
 WORKDIR /trex_exporter
-USER app
+USER nobody
 
 # copy built files
 COPY --from=builder /usr/src/app/bin .
