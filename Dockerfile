@@ -17,7 +17,7 @@ RUN go build -a -installsuffix cgo -o bin/trex
 RUN chmod +x bin/trex
 
 # create non-privelleged user for running the app
-RUN addgroup app && adduser --group app --no-create-home --disable-login --disable-password app
+RUN addgroup app && adduser --group app --no-create-home --disabled-login --disabled-password app
 RUN chown -R app:app /trex_exporter
 
 
