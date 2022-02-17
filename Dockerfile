@@ -15,7 +15,7 @@ ARG GOARCH=$TARGETARCH
 ARG CGO_ENABLED=0
 RUN go build -a -installsuffix cgo -o bin/trex
 RUN chmod +x bin/trex
-RUN chown -R nobody:nobody /trex_exporter
+RUN chown nobody:nogroup bin/trex
 
 
 #########
