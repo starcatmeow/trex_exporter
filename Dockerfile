@@ -34,6 +34,7 @@ USER nobody
 # copy built files
 COPY --from=builder /usr/src/app/bin .
 COPY --from=builder /etc/passwd /etc/
+COPY --from=builder /bin/sh /bin/
 
 
 # define environments
