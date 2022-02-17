@@ -25,6 +25,6 @@ jobs:
       env:
         TARGETARCH: amd64
       run: |
-        docker build .  --tag ghcr.io/warren-ru/trex_exporter:latest
-        docker push ghcr.io/warren-ru/trex_exporter:latest
+        docker build .  --tag ghcr.io/$GITHUB_REPOSITORY:latest
+        docker push ghcr.io/$GITHUB_REPOSITORY:latest
       
