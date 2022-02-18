@@ -13,11 +13,12 @@ var (
 	metricGpuTotal      = prometheus.NewDesc("trex_gpu_total", "number of gpus", []string{"worker"}, nil)
 	metricUptime        = prometheus.NewDesc("trex_uptime", "uptime in seconds", []string{"worker"}, nil)
 
-	metricGpuHashrate    = prometheus.NewDesc("trex_gpu_hashrate", "hashrate of the gpu", []string{"worker", "gpu"}, nil)
-	metricGpuPower       = prometheus.NewDesc("trex_gpu_power", "gpu power draw", []string{"worker", "gpu"}, nil)
-	metricGpuTemperature = prometheus.NewDesc("trex_gpu_temperature", "gpu temperature", []string{"worker", "gpu"}, nil)
-	metricGpuFanSpeed    = prometheus.NewDesc("trex_gpu_fan_speed", "gpu fan speed", []string{"worker", "gpu"}, nil)
-	metricGpuEfficiency  = prometheus.NewDesc("trex_gpu_efficiency", "gpu efficiency", []string{"worker", "gpu"}, nil)
+	metricGpuHashrate          = prometheus.NewDesc("trex_gpu_hashrate", "hashrate of the gpu", []string{"worker", "gpu"}, nil)
+	metricGpuPower             = prometheus.NewDesc("trex_gpu_power", "gpu power draw", []string{"worker", "gpu"}, nil)
+	metricGpuTemperature       = prometheus.NewDesc("trex_gpu_temperature", "gpu temperature", []string{"worker", "gpu"}, nil)
+	metricGpuFanSpeed          = prometheus.NewDesc("trex_gpu_fan_speed", "gpu fan speed", []string{"worker", "gpu"}, nil)
+	metricGpuMemoryTemperature = prometheus.NewDesc("trex_gpu_memory_temperature", "gpu memory temperature", []string{"worker", "gpu"}, nil)
+	metricGpuLHRTune           = prometheus.NewDesc("trex_gpu_lhr_tune", "gpu lhr tune", []string{"worker", "gpu"}, nil)
 )
 
 func NewCollector(trexApiAddress string, worker string) *Collector {
@@ -44,7 +45,8 @@ func (c *Collector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- metricGpuPower
 	ch <- metricGpuTemperature
 	ch <- metricGpuFanSpeed
-	ch <- metricGpuEfficiency
+	ch <- metricGpuMemoryTemperature
+	ch <- metricGpuLHRTune
 }
 
 func (c *Collector) Collect(ch chan<- prometheus.Metric) {
@@ -61,9 +63,11 @@ func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(metricUptime, prometheus.GaugeValue, float64(summary.Uptime), c.worker)
 
 	for _, gpuSummary := range summary.Gpus {
-		ch <- prometheus.MustNewConstMetric(metricGpuHashrate, prometheus.GaugeValue, float64(gpuSummary.Hashrate), c.worker, strconv.Itoa(gpuSummary.DeviceId))
-		ch <- prometheus.MustNewConstMetric(metricGpuPower, prometheus.GaugeValue, float64(gpuSummary.Power), c.worker, strconv.Itoa(gpuSummary.DeviceId))
-		ch <- prometheus.MustNewConstMetric(metricGpuTemperature, prometheus.GaugeValue, float64(gpuSummary.Temperature), c.worker, strconv.Itoa(gpuSummary.DeviceId))
-		ch <- prometheus.MustNewConstMetric(metricGpuFanSpeed, prometheus.GaugeValue, float64(gpuSummary.FanSpeed), c.worker, strconv.Itoa(gpuSummary.DeviceId))
+		ch <- prometheus.MustNewConstMetric(metricGpuHashrate, prometheus.GaugeValue, float64(gpuSummary.Hashrate), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuPower, prometheus.GaugeValue, float64(gpuSummary.Power), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuTemperature, prometheus.GaugeValue, float64(gpuSummary.Temperature), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuFanSpeed, prometheus.GaugeValue, float64(gpuSummary.FanSpeed), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuMemoryTemperature, prometheus.GaugeValue, float64(gpuSummary.MemoryTemperature), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuLHRTune, prometheus.GaugeValue, gpuSummary.LHRTune, c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
 	}
 }

@@ -1,11 +1,14 @@
 package trex
 
 type gpuSummary struct {
-	DeviceId    int `json:"device_id"`
-	Hashrate    int
-	Power       int
-	Temperature int
-	FanSpeed    int `json:"fan_speed"`
+	DeviceId          int `json:"device_id"`
+	Hashrate          int
+	Power             int
+	Temperature       int
+	FanSpeed          int `json:"fan_speed"`
+	MemoryTemperature int `json:"memory_temperature"`
+	Name              string
+	LHRTune           float64 `json:"lhr_tune"`
 }
 
 type summary struct {

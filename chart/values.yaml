@@ -4,3 +4,4 @@ image:
 settings:
   workerName: trex
   apiAddress: http://127.0.0.1:4067
+  jobLabel: trex

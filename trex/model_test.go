@@ -24,14 +24,14 @@ func TestParsesTrexSummary_Api3_3(t *testing.T) {
 	}
 
 	expectedSummary := summary{
-		Hashrate:      91189394,
-		AcceptedCount: 2,
-		RejectedCount: 3,
-		Uptime:        76,
+		Hashrate:      63829882,
+		AcceptedCount: 583,
+		RejectedCount: 0,
+		Uptime:        36267,
 		GpuTotal:      1,
-		SolvedCount:   4,
+		SolvedCount:   0,
 		Gpus: []gpuSummary{
-			{Hashrate: 91189394, FanSpeed: 54, Temperature: 65, Power: 237, DeviceId: 0},
+			{Hashrate: 63829882, FanSpeed: 75, Temperature: 44, Power: 202, DeviceId: 0, MemoryTemperature: 82, LHRTune: 73.90000000000003, Name: "RTX 3070 Ti"},
 		},
 	}
 
