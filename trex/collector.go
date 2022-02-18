@@ -63,11 +63,11 @@ func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(metricUptime, prometheus.GaugeValue, float64(summary.Uptime), c.worker)
 
 	for _, gpuSummary := range summary.Gpus {
-		ch <- prometheus.MustNewConstMetric(metricGpuHashrate, prometheus.GaugeValue, float64(gpuSummary.Hashrate), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
-		ch <- prometheus.MustNewConstMetric(metricGpuPower, prometheus.GaugeValue, float64(gpuSummary.Power), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
-		ch <- prometheus.MustNewConstMetric(metricGpuTemperature, prometheus.GaugeValue, float64(gpuSummary.Temperature), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
-		ch <- prometheus.MustNewConstMetric(metricGpuFanSpeed, prometheus.GaugeValue, float64(gpuSummary.FanSpeed), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
-		ch <- prometheus.MustNewConstMetric(metricGpuMemoryTemperature, prometheus.GaugeValue, float64(gpuSummary.MemoryTemperature), c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
-		ch <- prometheus.MustNewConstMetric(metricGpuLHRTune, prometheus.GaugeValue, gpuSummary.LHRTune, c.worker, strconv.Itoa(gpuSummary.DeviceId)+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuHashrate, prometheus.GaugeValue, float64(gpuSummary.Hashrate), c.worker, strconv.Itoa(gpuSummary.DeviceId)+"-"+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuPower, prometheus.GaugeValue, float64(gpuSummary.Power), c.worker, strconv.Itoa(gpuSummary.DeviceId)+"-"+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuTemperature, prometheus.GaugeValue, float64(gpuSummary.Temperature), c.worker, strconv.Itoa(gpuSummary.DeviceId)+"-"+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuFanSpeed, prometheus.GaugeValue, float64(gpuSummary.FanSpeed), c.worker, strconv.Itoa(gpuSummary.DeviceId)+"-"+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuMemoryTemperature, prometheus.GaugeValue, float64(gpuSummary.MemoryTemperature), c.worker, strconv.Itoa(gpuSummary.DeviceId)+"-"+gpuSummary.Name)
+		ch <- prometheus.MustNewConstMetric(metricGpuLHRTune, prometheus.GaugeValue, gpuSummary.LHRTune, c.worker, strconv.Itoa(gpuSummary.DeviceId)+"-"+gpuSummary.Name)
 	}
 }
